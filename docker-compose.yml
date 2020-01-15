@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+
+  nifi:
+    image: apache/nifi:latest
+    restart: always
+    volumes:
+      - ./postgres_jdbc:/postgres_jdbc
+    ports:
+      - 8081:8080
+    networks:
+      - nifi
+
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - nifi
+#        aliases:
+#          - postgres
+
+  kafka-srv:
+    image: ches/kafka:latest
+    environment:
+      - ZOOKEEPER_IP=zookeeper-srv
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-srv:9092
+      #ports:
+      #- "9092:9092"
+    expose:
+      - "9092"
+      #- "7203"
+    networks:
+      - nifi
+
+  zookeeper-srv:
+    image: zookeeper:latest
+    #ports:
+    #  - "2181:2181"
+    expose:
+      - "2181"
+    networks:
+      - nifi
+
+
+networks:
+  nifi:
+
+

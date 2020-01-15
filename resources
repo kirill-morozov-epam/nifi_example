@@ -1,0 +1,3 @@
+jdbc:postgresql://postgres:5432/postgres
+org.postgresql.Driver
+/postgres_jdbc/postgresql-jdbc.jar
